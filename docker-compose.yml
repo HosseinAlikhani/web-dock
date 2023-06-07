@@ -37,7 +37,7 @@ services:
 
   node:
     image: node
-    container_name: docker-laravel-node
+    container_name: docker-web-node
     restart: unless-stopped
     tty: true
     ports:
