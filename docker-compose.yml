@@ -1,0 +1,84 @@
+version: '3'
+services:
+  
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docker-laravel
+    container_name: docker-laravel
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/docker-laravel
+    volumes:
+      - .:/var/www/docker-laravel
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+    networks:
+      - docker-laravel
+
+  #Nginx Service
+  webserver:
+    image: nginx
+    container_name: docker-laravel-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/docker-laravel
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - docker-laravel
+
+  node:
+    image: nodejs
+    container_name: docker-laravel-node
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3000:5173"
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/docker-laravel
+    volumes:
+      - .:/var/www/docker-laravel
+    networks:
+      - docker-laravel
+
+  #MySQL Service
+  db:
+    image: mysql
+    container_name: docker-laravel-db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: docker-laravel
+      MYSQL_ROOT_PASSWORD: toor
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - docker-laravel
+
+  #MySQL Service
+  redis:
+    image: redis
+    container_name: docker-laravel-redis
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "6379:6379"
+    networks:
+      - docker-laravel
+
+#Docker Networks
+networks:
+  docker-laravel:
+    driver: bridge
