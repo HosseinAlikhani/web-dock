@@ -6,37 +6,37 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: docker-laravel
-    container_name: docker-laravel
+    image: docker-web
+    container_name: docker-web
     restart: unless-stopped
     tty: true
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
-    working_dir: /var/www/docker-laravel
+    working_dir: /var/www/docker
     volumes:
-      - .:/var/www/docker-laravel
+      - .:/var/www/docker
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
     networks:
-      - docker-laravel
+      - docker-web
 
   #Nginx Service
   webserver:
     image: nginx
-    container_name: docker-laravel-nginx
+    container_name: docker-web-nginx
     restart: unless-stopped
     tty: true
     ports:
       - "80:80"
     volumes:
-      - ./:/var/www/docker-laravel
+      - ./:/var/www/docker
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
     networks:
-      - docker-laravel
+      - docker-web
 
   node:
-    image: nodejs
+    image: node
     container_name: docker-laravel-node
     restart: unless-stopped
     tty: true
@@ -45,40 +45,40 @@ services:
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
-    working_dir: /var/www/docker-laravel
+    working_dir: /var/www/docker
     volumes:
-      - .:/var/www/docker-laravel
+      - .:/var/www/docker
     networks:
-      - docker-laravel
+      - docker-web
 
   #MySQL Service
   db:
     image: mysql
-    container_name: docker-laravel-db
+    container_name: docker-web-mysql
     restart: unless-stopped
     tty: true
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: docker-laravel
+      MYSQL_DATABASE: docker-web-mysql
       MYSQL_ROOT_PASSWORD: toor
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:
-      - docker-laravel
+      - docker-web
 
   #MySQL Service
   redis:
     image: redis
-    container_name: docker-laravel-redis
+    container_name: docker-web-redis
     restart: unless-stopped
     tty: true
     ports:
       - "6379:6379"
     networks:
-      - docker-laravel
+      - docker-web
 
 #Docker Networks
 networks:
-  docker-laravel:
+  docker-web:
     driver: bridge
