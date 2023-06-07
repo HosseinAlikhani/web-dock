@@ -1,6 +1,6 @@
 FROM php:8.1-fpm
-WORKDIR /var/www/docker-laravel
-COPY . /var/www/docker-laravel
+WORKDIR /var/www/docker
+COPY . /var/www/docker
 
 RUN apt-get update -y && apt-get install -y libxml2-dev libmcrypt-dev libzip-dev zip
 RUN docker-php-ext-configure zip
