@@ -64,6 +64,8 @@ services:
       MYSQL_ROOT_PASSWORD: toor
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    volumes:
+      - ./docker/mysql/db/:/var/lib/mysql
     networks:
       - docker-web
 
