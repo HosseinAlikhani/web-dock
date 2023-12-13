@@ -10,6 +10,8 @@ services:
     container_name: docker-web
     restart: unless-stopped
     tty: true
+    ports:
+      - "5173:5173"
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
@@ -40,8 +42,6 @@ services:
     container_name: docker-web-node
     restart: unless-stopped
     tty: true
-    ports:
-      - "3000:5173"
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
