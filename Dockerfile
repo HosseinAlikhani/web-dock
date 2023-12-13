@@ -1,4 +1,5 @@
 FROM php:8.1-fpm
+# FROM php:7.4-fpm
 WORKDIR /var/www/docker
 COPY . /var/www/docker
 
@@ -11,7 +12,12 @@ RUN docker-php-ext-install soap
 RUN docker-php-ext-install gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# EXPOSE 8000
-# CMD php artisan serve --host=0.0.0.0 --port=8000
+# Installing Node
+SHELL ["/bin/bash", "--login", "-i", "-c"]
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+# RUN source /root/.bashrc && nvm install 12.22.1
+RUN source /root/.bashrc && nvm install 16.13
+SHELL ["/bin/bash", "--login", "-c"]
+
 EXPOSE 9000
 CMD ["php-fpm"]
