@@ -1,0 +1,86 @@
+version: '3'
+services:
+  
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docker-web-7.4
+    container_name: docker-web-7.4
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/docker
+    volumes:
+      - .:/var/www/docker
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+    networks:
+      - docker-web
+
+  #Nginx Service
+  webserver:
+    image: nginx
+    container_name: docker-web-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/docker
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - docker-web
+
+  node:
+    image: node
+    container_name: docker-web-node
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3000:5173"
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/docker
+    volumes:
+      - .:/var/www/docker
+    networks:
+      - docker-web
+
+  #MySQL Service
+  db:
+    image: mysql
+    container_name: docker-web-mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: docker-web-mysql
+      MYSQL_ROOT_PASSWORD: toor
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker/mysql/db/:/var/lib/mysql
+    networks:
+      - docker-web
+
+  #MySQL Service
+  redis:
+    image: redis
+    container_name: docker-web-redis
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "6379:6379"
+    networks:
+      - docker-web
+
+#Docker Networks
+networks:
+  docker-web:
+    driver: bridge
