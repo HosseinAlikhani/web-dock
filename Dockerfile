@@ -16,7 +16,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 SHELL ["/bin/bash", "--login", "-i", "-c"]
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
 # RUN source /root/.bashrc && nvm install 12.22.1
-RUN source /root/.bashrc && nvm install 16.13
+RUN source /root/.bashrc && nvm install 16.13 && nvm install 18.19
 SHELL ["/bin/bash", "--login", "-c"]
 
 EXPOSE 9000
