@@ -1,4 +1,5 @@
-FROM php:8.1-fpm
+FROM php:8.3-fpm
+# FROM php:8.1-fpm
 # FROM php:7.4-fpm
 WORKDIR /var/www/docker
 COPY . /var/www/docker
